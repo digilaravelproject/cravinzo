@@ -195,6 +195,54 @@
                 </div>
             </div>
         </form>
+        <!-- Delivery man base payout section -->
+        <div class="mt-4 pb-2 text-center">
+            <h3>{{ translate('Delivery_man_base_payout') }}</h3>
+            <p>
+                {{ translate('Set_base_payout_for_all_deliverymen') }}
+            </p>
+        </div>
+        <div class="card shadow--card border-0 mt-3 p-0">
+            <div class="card-header">
+                <h5 class="card-title align-items-center">
+                    <span class="card-header-icon mr-2">
+                        <i class="tio-settings-outlined"></i>
+                    </span>
+                    <span>{{translate('Base_Payout_Settings')}}</span> &nbsp;
+                    <img src="{{dynamicAsset('/public/assets/admin/img/info-circle.svg')}}" data-toggle="tooltip" title="{{ translate('messages.Set_the_base_payout_amount_for_all_deliverymen_in_this_zone.') }}" alt="">
+                </h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.zone.update_base_payout', $zone->id) }}" method="post">
+                    @csrf
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="input-label text-capitalize d-inline-flex alig-items-center">
+                                    {{ translate('Total_Base_Payout') }}
+                                    ({{ \App\CentralLogics\Helpers::currency_symbol() }})&nbsp;
+                                    <span data-toggle="tooltip" data-placement="right"
+                                        data-original-title="{{ translate('messages.Set_the_base_payout_amount_for_all_deliverymen_in_this_zone.')}}"
+                                        class="input-label-secondary text-danger"><img
+                                            src="{{ dynamicAsset('/public/assets/admin/img/info-circle.svg') }}"
+                                            alt="{{ translate('Total_Base_Payout') }}"></span>
+                                </label>
+                                <input id="base_payout" name="base_payout" type="number"
+                                    min=".001" step=".001" class="form-control h--45px" required
+                                    placeholder="{{ translate('Ex:_100') }}"
+                                    value="{{ $base_payout ?? '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn--container mt-3 justify-content-end">
+                        <button id="base_payout_cancel" type="reset"
+                            class="btn btn--reset">{{ translate('messages.cancel') }}</button>
+                        <button type="submit" class="btn btn--primary">{{ translate('messages.save') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="mt-4 pb-2 text-center">
             <h3>{{ translate('messages.Incentive_Settings_for_Deliveryman') }}</h3>
             <p>

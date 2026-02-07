@@ -450,6 +450,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('settings/{id}', [ZoneController::class, 'zone_settings'])->name('settings');
             Route::get('latest-settings', [ZoneController::class, 'latest_zone_settings'])->name('latest-settings');
             Route::post('zone-settings-update/{id}', [ZoneController::class, 'zone_settings_update'])->name('zone_settings_update');
+            Route::post('update-base-payout/{id}', [ZoneController::class, 'update_base_payout'])->name('update_base_payout');
             Route::delete('delete/{zone}', [ZoneController::class, 'destroy'])->name('delete');
             Route::get('status/{id}/{status}', [ZoneController::class, 'status'])->name('status');
             Route::get('default-status', [ZoneController::class, 'defaultStatus'])->name('defaultStatus');

@@ -105,7 +105,8 @@ class ZoneController extends Controller
             return back();
         }
         $zone=Zone::with(['incentives','restaurantFlatFees'])->selectRaw("*,ST_AsText(ST_Centroid(`coordinates`)) as center")->latest()->first();
-        return view('admin-views.zone.settings', compact('zone'));
+        $base_payout = $zone->restaurantFlatFees->first()?->base_payout ?? null;
+        return view('admin-views.zone.settings', compact('zone', 'base_payout'));
     }
     public function zone_settings($id)
     {
@@ -115,7 +116,8 @@ class ZoneController extends Controller
             return back();
         }
         $zone=Zone::with(['incentives','restaurantFlatFees'])->selectRaw("*,ST_AsText(ST_Centroid(`coordinates`)) as center")->findOrFail($id);
-        return view('admin-views.zone.settings', compact('zone'));
+        $base_payout = $zone->restaurantFlatFees->first()?->base_payout ?? null;
+        return view('admin-views.zone.settings', compact('zone', 'base_payout'));
     }
 
     public function update(Request $request, $id)
@@ -192,6 +194,9 @@ class ZoneController extends Controller
         // Handle restaurant flat fees
         // Expect arrays: restaurant_flat_fee_from[], restaurant_flat_fee_to[], restaurant_flat_fee[]
         if($request->has('restaurant_flat_fee')){
+            // Get existing base_payout before deleting
+            $existing_base_payout = RestaurantFlatFee::where('zone_id', $id)->first()?->base_payout;
+            
             // clear existing for the zone
             RestaurantFlatFee::where('zone_id', $id)->delete();
             $froms = $request->input('restaurant_flat_fee_from', []);
@@ -208,10 +213,27 @@ class ZoneController extends Controller
                     'flat_fee_from' => $from,
                     'flat_fee_to' => $to,
                     'flat_fee' => $fee,
+                    'base_payout' => $existing_base_payout,
                 ]);
             }
         }
         Toastr::success(translate('messages.zone_settings_updated_successfully'));
+        return back();
+    }
+
+    public function update_base_payout(Request $request, $id){
+        $request->validate([
+            'base_payout'=>'required|numeric|between:0.001,999999999999.99',
+        ]);
+
+        $zone = Zone::findOrFail($id);
+        
+        // Update all restaurant flat fee records for this zone with the base payout
+        RestaurantFlatFee::where('zone_id', $id)->update([
+            'base_payout' => $request->base_payout
+        ]);
+        
+        Toastr::success(translate('messages.base_payout_updated_successfully'));
         return back();
     }
 
