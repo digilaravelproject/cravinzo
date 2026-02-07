@@ -7119,8 +7119,8 @@ a[class*="btn--"]:hover {
 }
 
 .btn--primary {
-    background: var(--primary-clr);
-    border-color: var(--primary-clr) !important;
+    background: #1c4116;
+    border-color: #1c4116 !important;
 }
 
 .btn--primary:hover {
@@ -7129,12 +7129,12 @@ a[class*="btn--"]:hover {
 
 .btn-outline-primary:not(:hover) {
     background: transparent !important;
-    color: var(--primary-clr);
-    border-color: var(--primary-clr) !important;
+    color: #1c4116;
+    border-color: #1c4116 !important;
 }
 
 .btn-outline-primary:hover {
-    background: var(--primary-clr);
+    background: #1c4116;
     border-color: var(--primary-clr) !important;
     color: #fff !important;
 }
@@ -7454,7 +7454,7 @@ a[class*="btn--"]:hover {
     padding: 20px 10px 16px;
     position: sticky;
     top: 0;
-    background: #334257;
+    background: #1c4116;
     z-index: 9;
 }
 

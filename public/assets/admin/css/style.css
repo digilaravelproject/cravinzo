@@ -983,11 +983,11 @@ div.scroll-down::-webkit-scrollbar {
 }
 
 input:checked + .slider {
-    background-color: #377dff;
+    background-color: #1c4116;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #377dff;
+    box-shadow: 0 0 1px #1c4116;
 }
 
 input:checked + .slider:before {
@@ -1126,7 +1126,7 @@ input:checked + .slider:before {
 }
 
 .initial-32 .btn-check:checked + .check-label {
-    background-color: #ef7822;
+    background-color: #1c4116;
     color: #ffffff;
     border: none;
 }
@@ -1607,7 +1607,7 @@ span.initial-38-7,
 }
 
 .initial-49 .btn-check:checked + .check-label {
-    background-color: var(--theameColor);
+    background-color: #1c4116;
     color: #ffffff;
     border: none;
 }
@@ -2327,7 +2327,7 @@ span.initial-38-7,
 }
 
 .nav-sub {
-    background: #334257 !important;
+    background: #2f5828 !important;
 }
 
 .initial-63 {
@@ -3519,14 +3519,14 @@ span.initial-38-7,
 }
 
 .modal .form--check .form-check-input[type="radio"]:checked {
-    background-color: #ff8a00;
-    box-shadow: 0 0 0 3px #fff, 0 0 0 4px #ff8a00;
+    background-color: #1c4116;
+    box-shadow: 0 0 0 3px #fff, 0 0 0 4px #1c4116;
 }
 
 .form--check .form-check-input[type="checkbox"]:checked {
     background: url("./images/check-mark-2.png") #fff no-repeat center
         center/contain !important;
-    box-shadow: 0 0 0 3px #fff, 0 0 0 4px #ff8a00;
+    box-shadow: 0 0 0 3px #fff, 0 0 0 4px #1c4116;
     border-radius: 2px;
 }
 
@@ -4385,7 +4385,7 @@ button.resend {
 
 .nav--tabs.nav--pills .nav-item .nav-link.active {
     font-weight: 600;
-    background: var(--theameColor) !important;
+    background: #1c4116 !important;
     color: #ffffff !important;
 }
 
@@ -6586,7 +6586,7 @@ textarea.form-control.h-100px {
     .navbar-nav
     > .navbar-vertical-aside-has-menu.active
     > .nav-link-toggle::before {
-    background-color: var(--theameColor) !important;
+    background-color: #1c4116 !important;
 }
 
 .order--card__color-1 {
@@ -6728,7 +6728,7 @@ textarea.form-control.h-100px {
 }
 
 .text-hover-primary:hover {
-    color: var(--theameColor) !important;
+    color: #1c4116 !important;
 }
 
 .new-invoice .text-muted {
@@ -6754,12 +6754,12 @@ textarea.form-control.h-100px {
 }
 
 .radio-wrap.active > label {
-    color: var(--theameColor);
+    color: #1c4116;
     font-weight: 600;
 }
 
 .alert-primary-light {
-    color: var(--theameColor);
+    color: #1c4116;
     background-color: #edf7ff;
     border-color: #edf7ff;
 }
@@ -6965,7 +6965,7 @@ textarea.form-control.h-100px {
 }
 
 .copy_button.copied i {
-    color: var(--theameColor) !important;
+    color: #1c4116 !important;
 }
 
 .withdraw-info-sidebar {
@@ -7216,7 +7216,7 @@ textarea.form-control.h-100px {
 }
 .sorting-card .form--check .form-check-input[type="radio"]:checked,
 .sorting-card .toggle-switch-input:checked + .toggle-switch-label {
-    background-color: #006fbd !important;
+    background-color: #1c4116 !important;
 }
 .sorting-card .form-check-input:checked + .form-check-label {
     font-weight: 600;
@@ -7542,7 +7542,7 @@ video#VisaChipCardVideo {
 }
 
 .upload-file__actions .upload-file__delete_btn:hover {
-    background-color: var(--c2) !important;
+    background-color: #1c4116 !important;
 }
 .fs-12 {
     font-size: 12px;
@@ -7577,8 +7577,8 @@ video#VisaChipCardVideo {
     position: relative;
 }
 .form--check-2 .form-check-input:checked {
-    background-color: var(--primary-clr) !important;
-    border-color: var(--primary-clr) !important;
+    background-color: #1c4116 !important;
+    border-color: #1c4116 !important;
 }
 .form--check-2 .form-check-input:not(:checked) ~ .form-check-label {
     opacity: 0.75;
@@ -8131,7 +8131,7 @@ a.hover-text-body[href]:hover {
 }
 .btn-soft-submit-2 {
     padding: 8px;
-    color: var(--theameColor);
+    color: #1c4116;
     background: #01a1fd5e;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -9585,13 +9585,13 @@ img{
     background: #FFE9E9;
 }
 .theme-clr{
-    color: var(--theameColor);
+    color: #1c4116;
 }
 .theme-border{
-    border: 1px solid var(--theameColor);
+    border: 1px solid #1c4116;
 }
 .theme-hover:hover{
-    background-color: var(--theameColor);
+    background-color: #1c4116;
     color: #fff;
 }
 .success-border{
@@ -9651,7 +9651,7 @@ img{
     transition: all ease 0.3s;
 }
 .dots-style2 .owl-dots .owl-dot.active{
-    background: var(--theameColor);
+    background: #1c4116;
     width: 24px;
 }
 
@@ -10028,7 +10028,7 @@ img{
 }
 
 .more{
-    background-color: var(--theameColor);
+    background-color: #1c4116;
     width: 24px;
     height: 24px;
     border-radius: 50%;
@@ -10297,7 +10297,7 @@ img{
 
 
 .search-item.active{
-    border-color: var(--theameColor) !important;
+    border-color: #1c4116 !important;
 }
 .quick_modal_init{
     overflow: hidden !important;
@@ -10474,7 +10474,7 @@ img{
 
 /*Version 8.5 New Css*/
 .nav-tabs.nav--theme-version .nav-item .nav-link.active{
-    background-color: var(--theameColor) !important;
+    background-color: #1c4116 !important;
 }
 .p--20{
     padding: 20px;
@@ -10534,12 +10534,12 @@ img{
     width: 35px;
     height: 35px;
     background-color: var(--bs-white);
-    color: var(--theameColor);
+    color: #1c4116;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.05);
     transition: all 0.4s;
 }
 .social-media-group a:hover{
-    background-color: var(--theameColor);
+    background-color: #1c4116;
     color: var(--bs-white);
 }
 
@@ -10821,7 +10821,7 @@ img{
     height: 16px;
     width: 16px;
     background: #fff;
-    border: 5px solid var(--theameColor);
+    border: 5px solid #1c4116;
     border-radius: 50%;
     cursor: pointer;
     pointer-events: all;
@@ -10832,7 +10832,7 @@ img{
     height: 17px;
     width: 17px;
     background: var(--bs-white);
-    border: 5px solid var(--theameColor);
+    border: 5px solid #1c4116;
     border-radius: 50%;
     cursor: pointer;
     pointer-events: all;
@@ -10853,7 +10853,7 @@ img{
 .slider-track-filled {
     position: absolute;
     height: 100%;
-    background: var(--theameColor);
+    background: #1c4116;
     left: 0;
     right: 0;
     z-index: 2;
@@ -10898,7 +10898,7 @@ img{
 }
 .active-opactiy5{
     opacity: 0.5 !important;
-    background: var(--theameColor) !important;
+    background: #1c4116 !important;
     border-radius: 0 0 6px 0 !important;
 }
 .bg--F0F2F5{
@@ -10974,8 +10974,8 @@ img{
 }
 
 .custom-control-input:checked ~ .custom-control-label::before{
-    background-color: var(--theameColor) !important;
-    border-color: var(--theameColor) !important;
+    background-color: #1c4116 !important;
+    border-color: #1c4116 !important;
 }
 
 
@@ -11465,7 +11465,7 @@ img{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--theameColor);
+    background-color: #1c4116;
     color: var(--bs-white);
     margin-bottom: 10px;
 }
@@ -11590,7 +11590,7 @@ img{
   scroll-behavior: smooth;
 }
 .tabs-slide-wrap .nav--tabs.nav--pills .nav-item .nav-link.active{
-    background-color: var(--theameColor) !important;
+    background-color: #1c4116 !important;
 }
 
 .tabs-inner::-webkit-scrollbar {
@@ -11614,7 +11614,7 @@ img{
     background: var(--bs-white);
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.08);
     border-radius: 45px;
-    color: var(--theameColor);
+    color: #1c4116;
 }
 
 .tabs-slide-wrap .button-prev{
@@ -11720,7 +11720,7 @@ img{
 }
 
 .tabs-slide-language .nav--tabs.nav--pills .nav-item .nav-link.active{
-    background-color: var(--theameColor) !important;
+    background-color: #1c4116 !important;
 }
 
 .tabs-inner::-webkit-scrollbar {
@@ -11744,7 +11744,7 @@ img{
     background: var(--bs-white);
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.08);
     border-radius: 45px;
-    color: var(--theameColor);
+    color: #1c4116;
 }
 
 .tabs-slide-language .button-prev{
@@ -11760,6 +11760,7 @@ img{
         }
     }
 }
+
 .tabs-slide-language .button-next{
     top: 28px;
     inset-inline-end: -19px;
@@ -11834,7 +11835,7 @@ img{
 }
 
 .bg-334257 {
-  background-color: var(--sidebar) !important;
+  background-color: #1c4116 !important;
 }
 
 .max-w-240{
@@ -11876,7 +11877,7 @@ img{
 .box-input-type select{
     width: 100%;
     height: 35px;
-    background-color: var(--bs-white);
+    background-color: #1c4116;
 }
 .fs-13{
     font-size: 0.813rem !important;

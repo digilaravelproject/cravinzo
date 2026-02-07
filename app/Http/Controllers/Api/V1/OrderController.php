@@ -28,6 +28,7 @@ use App\Models\CashBackHistory;
 use App\Models\OfflinePayments;
 use App\CentralLogics\OrderLogic;
 use App\Models\OrderCancelReason;
+use App\Models\RestaurantFlatFee;
 use App\CentralLogics\CouponLogic;
 use Illuminate\Support\Facades\DB;
 use App\Mail\OrderVerificationMail;
@@ -250,10 +251,10 @@ class OrderController extends Controller
                 ]
             ], 403);
         }
-
+        
         foreach ($carts as $c) {
 
-            if ($c['item_type'] === 'App\Models\ItemCampaign' || $c['item_type'] === 'AppModelsItemCampaign')  {
+            if (isset($c['item_type']) && ($c['item_type'] === 'App\Models\ItemCampaign' || $c['item_type'] === 'AppModelsItemCampaign'))  {
                 $product = ItemCampaign::active()->find($c['item_id']);
                 $campaign_id = $c['item_id'];
                 $code = 'campaign';
@@ -326,6 +327,7 @@ class OrderController extends Controller
                     'created_at' => now(),
                     'updated_at' => now()
                 ];
+                
                 $order_details[] = $or_d;
                 $total_addon_price += $or_d['total_add_on_price'];
                 $product_price += $price*$or_d['quantity'];
@@ -456,7 +458,6 @@ class OrderController extends Controller
                 $free_delivery_by = 'admin';
             }
         }
-
 
         if($restaurant->free_delivery){
             $order->delivery_charge = 0;
@@ -1486,7 +1487,20 @@ class OrderController extends Controller
             $increased=0;
         }
 
-        $original_delivery_charge = ($request->distance * $per_km_shipping_charge > $minimum_shipping_charge) ? $request->distance * $per_km_shipping_charge + $extra_charges  : $minimum_shipping_charge + $extra_charges;
+        // $original_delivery_charge = ($request->distance * $per_km_shipping_charge > $minimum_shipping_charge) ? $request->distance * $per_km_shipping_charge + $extra_charges  : $minimum_shipping_charge + $extra_charges;
+        
+        //Rider display as below
+        
+        $flatFee = RestaurantFlatFee::latestByZone();
+        $base_payout = $flatFee->base_payout ?? 0;
+        
+        if($request->distance > 6){
+            $delivery_dist = $request->distance - 6;
+            
+            $original_delivery_charge = ($delivery_dist * $per_km_shipping_charge) + $base_payout;
+        } else {
+            $original_delivery_charge = 0;
+        }
 
         if ($maximum_shipping_charge  > $minimum_shipping_charge  && $original_delivery_charge >  $maximum_shipping_charge ){
             $original_delivery_charge = $maximum_shipping_charge;
@@ -1495,8 +1509,25 @@ class OrderController extends Controller
             $original_delivery_charge = $original_delivery_charge;
         }
 
+        // if(!isset($delivery_charge)){
+        //     $delivery_charge = ($request->distance * $per_km_shipping_charge > $minimum_shipping_charge) ? $request->distance * $per_km_shipping_charge : $minimum_shipping_charge;
+        //     if ( $maximum_shipping_charge  > $minimum_shipping_charge  && $delivery_charge + $extra_charges >  $maximum_shipping_charge ){
+        //         $delivery_charge =$maximum_shipping_charge;
+        //     }
+        //     else{
+        //         $delivery_charge =$extra_charges + $delivery_charge;
+        //     }
+        // }
+        
+        // Add delivery_charge amount in db on new busniess logic
+        
         if(!isset($delivery_charge)){
-            $delivery_charge = ($request->distance * $per_km_shipping_charge > $minimum_shipping_charge) ? $request->distance * $per_km_shipping_charge : $minimum_shipping_charge;
+            if($request->distance > 6){
+                $delivery_dist = $request->distance - 6;
+                $delivery_charge = $delivery_dist * $per_km_shipping_charge;
+            } else {
+                $delivery_charge = 0;
+            }
             if ( $maximum_shipping_charge  > $minimum_shipping_charge  && $delivery_charge + $extra_charges >  $maximum_shipping_charge ){
                 $delivery_charge =$maximum_shipping_charge;
             }
@@ -1504,6 +1535,7 @@ class OrderController extends Controller
                 $delivery_charge =$extra_charges + $delivery_charge;
             }
         }
+        
         if($increased > 0 ){
             if($delivery_charge > 0){
                 $increased_fee = ($delivery_charge * $increased) / 100;

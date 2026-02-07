@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Exception;
 use App\Models\Zone;
 use App\Models\Incentive;
+use App\Models\RestaurantFlatFee;
 use App\Exports\ZoneExport;
 use Illuminate\Http\Request;
 use App\CentralLogics\Helpers;
@@ -103,7 +104,7 @@ class ZoneController extends Controller
             Toastr::warning(translate('messages.you_can_not_edit_this_zone_please_add_a_new_zone_to_edit'));
             return back();
         }
-        $zone=Zone::with('incentives')->selectRaw("*,ST_AsText(ST_Centroid(`coordinates`)) as center")->latest()->first();
+        $zone=Zone::with(['incentives','restaurantFlatFees'])->selectRaw("*,ST_AsText(ST_Centroid(`coordinates`)) as center")->latest()->first();
         return view('admin-views.zone.settings', compact('zone'));
     }
     public function zone_settings($id)
@@ -113,7 +114,7 @@ class ZoneController extends Controller
             Toastr::warning(translate('messages.you_can_not_edit_this_zone_please_add_a_new_zone_to_edit'));
             return back();
         }
-        $zone=Zone::with('incentives')->selectRaw("*,ST_AsText(ST_Centroid(`coordinates`)) as center")->findOrFail($id);
+        $zone=Zone::with(['incentives','restaurantFlatFees'])->selectRaw("*,ST_AsText(ST_Centroid(`coordinates`)) as center")->findOrFail($id);
         return view('admin-views.zone.settings', compact('zone'));
     }
 
@@ -188,6 +189,28 @@ class ZoneController extends Controller
         $zone->increased_delivery_fee_status = $request->increased_delivery_fee_status ?? 0;
         $zone->increase_delivery_charge_message = $request->increase_delivery_charge_message ?? null;
         $zone->save();
+        // Handle restaurant flat fees
+        // Expect arrays: restaurant_flat_fee_from[], restaurant_flat_fee_to[], restaurant_flat_fee[]
+        if($request->has('restaurant_flat_fee')){
+            // clear existing for the zone
+            RestaurantFlatFee::where('zone_id', $id)->delete();
+            $froms = $request->input('restaurant_flat_fee_from', []);
+            $tos = $request->input('restaurant_flat_fee_to', []);
+            $fees = $request->input('restaurant_flat_fee', []);
+            $count = max(count($froms), count($tos), count($fees));
+            for($i=0;$i<$count;$i++){
+                $from = isset($froms[$i]) && $froms[$i] !== '' ? $froms[$i] : null;
+                $to = isset($tos[$i]) && $tos[$i] !== '' ? $tos[$i] : null;
+                $fee = isset($fees[$i]) && $fees[$i] !== '' ? $fees[$i] : null;
+                if($from === null && $to === null && $fee === null) continue;
+                RestaurantFlatFee::create([
+                    'zone_id' => $id,
+                    'flat_fee_from' => $from,
+                    'flat_fee_to' => $to,
+                    'flat_fee' => $fee,
+                ]);
+            }
+        }
         Toastr::success(translate('messages.zone_settings_updated_successfully'));
         return back();
     }

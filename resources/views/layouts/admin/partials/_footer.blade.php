@@ -30,9 +30,9 @@
                     </li>
 
 
-                    <li class="list-inline-item py-1">
+                    <?php /*<li class="list-inline-item py-1">
                         <span class="badge app--version">{{ translate('software_version')  }} {{env('SOFTWARE_VERSION')}}</span>
-                    </li>
+                    </li>*/ ?>
 
                 </ul>
                 <!-- End List Dot -->

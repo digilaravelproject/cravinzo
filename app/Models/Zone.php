@@ -24,6 +24,9 @@ class Zone extends Model
         'max_cod_order_amount'=>'float',
         'increased_delivery_fee'=>'float',
         'increased_delivery_fee_status'=>'integer',
+        'flat_fee_from'=>'float',
+        'flat_fee_to'=>'float',
+        'flat_fee'=>'float',
         'coordinates' => Polygon::class,
     ];
 
@@ -76,6 +79,11 @@ class Zone extends Model
     public function incentives()
     {
         return $this->hasMany(Incentive::class)->orderBy('earning');
+    }
+
+    public function restaurantFlatFees()
+    {
+        return $this->hasMany(RestaurantFlatFee::class, 'zone_id')->orderBy('id');
     }
 
     public function incentive_logs()

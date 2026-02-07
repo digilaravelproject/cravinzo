@@ -149,6 +149,45 @@
                     </div>
 
                 </div>
+
+                <div class="col-12 p-0">
+                    <h5 class="mt-3 mb-2 px-3">{{ translate('Restaurant Flat Fee') }}</h5>
+                    <div class="card mx-3 p-3">
+                        <p class="text-muted">{{ translate('Set flat delivery fees for restaurants in this zone. Enter From, To and Fee values.') }}</p>
+                        @php
+                            $fees = $zone->restaurantFlatFees ?? collect();
+                            $rows = max(3, $fees->count());
+                        @endphp
+                        <div id="restaurant-flat-fee-rows">
+                            @for($i=0;$i<$rows;$i++)
+                                @php $row = $fees->get($i); @endphp
+                                <div class="row g-3 mb-2 align-items-end flat-fee-row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">{{ translate('From') }} ({{ \App\CentralLogics\Helpers::currency_symbol() }})</label>
+                                        <input type="number" name="restaurant_flat_fee_from[]" step="0.01" min="0" class="form-control" value="{{ $row?->flat_fee_from ?? '' }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">{{ translate('To') }} ({{ \App\CentralLogics\Helpers::currency_symbol() }})</label>
+                                        <input type="number" name="restaurant_flat_fee_to[]" step="0.01" min="0" class="form-control" value="{{ $row?->flat_fee_to ?? '' }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">{{ translate('Fee') }} ({{ \App\CentralLogics\Helpers::currency_symbol() }})</label>
+                                        <input type="number" name="restaurant_flat_fee[]" step="0.01" min="0" class="form-control" value="{{ $row?->flat_fee ?? '' }}">
+                                    </div>
+                                    <div class="col-md-3 d-flex">
+                                        <button type="button" class="btn action-btn btn--danger btn-outline-danger ml-auto remove-flat-row" title="{{ translate('Delete') }}">
+                                            <i class="tio-delete-outlined"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            @endfor
+                        </div>
+                        <div class="text-right">
+                            <button  type="button"  id="add_flat_row" class="btn text--primary py-1 ml-auto show-incentive">{{translate('Add Row+')}}</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="btn--container mt-3 justify-content-end">
                     <button id="reset_btn" type="reset"
                         class="btn btn--reset">{{ translate('messages.reset') }}</button>
@@ -354,6 +393,18 @@
                     $('#increased_delivery_fee').val('Ex : 0');
                     $('#increase_delivery_charge_message').val('');
                 }
+            });
+            // Add/remove restaurant flat fee rows
+            $('#add_flat_row').click(function(){
+                var $rows = $('#restaurant-flat-fee-rows');
+                var $last = $rows.find('.flat-fee-row').last();
+                var $clone = $last.clone();
+                $clone.find('input').val('');
+                $rows.append($clone);
+            });
+
+            $(document).on('click', '.remove-flat-row', function(){
+                $(this).closest('.flat-fee-row').remove();
             });
         });
     </script>

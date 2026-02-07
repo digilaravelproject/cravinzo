@@ -43,7 +43,7 @@
                             <span class="bg-card text-muted border rounded-3 p-1 fs-12 fw-bold lh-1 ms-1 ctrlplusk d-none d-md-block">Ctrl+K</span>
                         </button>
                     </li>
-                    <li class="nav-item d-none d-sm-inline-block mr-2">
+                    <?php /*<li class="nav-item d-none d-sm-inline-block mr-2">
                         <div class="hs-unfold">
                             <div>
                                 @php( $local = session()->has('local')?session('local'):null)
@@ -79,7 +79,7 @@
                                 @endif
                             </div>
                         </div>
-                    </li>
+                    </li> */?>
                     <li class="nav-item d-none d-sm-inline-block mr-4">
                         <!-- Notification -->
                         <div class="hs-unfold">
@@ -97,7 +97,7 @@
                         </div>
                         <!-- End Notification -->
                     </li>
-                    <li class="nav-item d-none d-sm-inline-block mr-4">
+                    <?php /* <li class="nav-item d-none d-sm-inline-block mr-4">
                         <!-- Notification -->
                         <div class="hs-unfold">
                             <a class="js-hs-unfold-invoker btn btn-icon btn-soft-secondary rounded-circle"
@@ -110,7 +110,7 @@
                             </a>
                         </div>
                         <!-- End Notification -->
-                    </li>
+                    </li> */?>
                     <li class="nav-item">
                         <!-- Account -->
                         <div class="hs-unfold">
