@@ -233,7 +233,7 @@ class DeliverymanController extends Controller
     {
         $dm = DeliveryMan::where(['auth_token' => $request['token']])->first();
 
-        $orders = Order::with(['customer', 'restaurant']);
+        $orders = Order::with(['customer', 'restaurant', 'delivery_address']);
 
         if($dm->type == 'zone_wise')
             {
@@ -275,6 +275,52 @@ class DeliverymanController extends Controller
         ->orderBy('schedule_at', 'desc')
         ->Notpos()
         ->get();
+
+        // Get delivery man's current location from latest DeliveryHistory
+        $dmCurrentLocation = DeliveryHistory::where('delivery_man_id', $dm->id)
+            ->latest('created_at')
+            ->first();
+
+        // Get zone details for base payout and per km rate
+        $zone = Zone::find($dm->zone_id);
+        $base_payout = config('base_payout_dm') ?? 25;
+        $per_km_rate = $zone?->per_km_shipping_charge ?? 10;
+
+        // Calculate dynamic delivery charge for each order
+        $orders->each(function($order) use($dm, $dmCurrentLocation, $base_payout, $per_km_rate) {
+            try {
+                // Get delivery man current location coordinates
+                $dm_latitude = $dmCurrentLocation?->latitude;
+                $dm_longitude = $dmCurrentLocation?->longitude;
+
+                // Get restaurant coordinates
+                $restaurant_latitude = $order->restaurant?->latitude;
+                $restaurant_longitude = $order->restaurant?->longitude;
+
+                // Get customer delivery address coordinates
+                $delivery_address = $order->delivery_address;
+                $delivery_address = json_decode($delivery_address);
+                $customer_latitude = $delivery_address?->latitude;
+                $customer_longitude = $delivery_address?->longitude;
+
+                // Calculate dynamic delivery charge
+                $order->original_delivery_charge = Helpers::calculate_dynamic_delivery_charge(
+                    $dm_latitude,
+                    $dm_longitude,
+                    $restaurant_latitude,
+                    $restaurant_longitude,
+                    $customer_latitude,
+                    $customer_longitude,
+                    $base_payout,
+                    $per_km_rate
+                );
+            } catch (\Exception $e) {
+                info('Error calculating delivery charge for order ' . $order->id . ': ' . $e->getMessage());
+                // Fallback to base payout if calculation fails
+                $order->original_delivery_charge = (float) $base_payout;
+            }
+        });
+
         $orders= Helpers::order_data_formatting($orders, true);
         return response()->json($orders, 200);
     }

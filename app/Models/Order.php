@@ -143,6 +143,10 @@ class Order extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function delivery_address()
+    {
+        return $this->belongsTo(CustomerAddress::class, 'delivery_address_id');
+    }
 
     public function coupon()
     {

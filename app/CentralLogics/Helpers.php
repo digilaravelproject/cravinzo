@@ -4933,4 +4933,71 @@ class Helpers
             return true;
         }
 
+        /**
+         * Calculate dynamic delivery charge based on delivery man and customer location
+         * 
+         * @param float|null $dm_latitude - Delivery man current latitude
+         * @param float|null $dm_longitude - Delivery man current longitude
+         * @param float|null $restaurant_latitude - Restaurant latitude
+         * @param float|null $restaurant_longitude - Restaurant longitude
+         * @param float|null $customer_latitude - Customer address latitude
+         * @param float|null $customer_longitude - Customer address longitude
+         * @param float|null $base_payout - Base payout amount
+         * @param float|null $per_km_rate - Per km shipping charge after 4km
+         * 
+         * @return float - Calculated delivery charge
+         */
+        public static function calculate_dynamic_delivery_charge(
+            $dm_latitude = null,
+            $dm_longitude = null,
+            $restaurant_latitude = null,
+            $restaurant_longitude = null,
+            $customer_latitude = null,
+            $customer_longitude = null,
+            $base_payout = null,
+            $per_km_rate = null
+        ) {
+            try {
+                // Default values if not provided
+                $base_payout = $base_payout ?? 25;
+                $per_km_rate = $per_km_rate ?? 10;
+
+                // If any coordinate is missing, return base payout
+                if (
+                    !$dm_latitude || !$dm_longitude ||
+                    !$restaurant_latitude || !$restaurant_longitude ||
+                    !$customer_latitude || !$customer_longitude
+                ) {
+                    return (float) $base_payout;
+                }
+
+                // Calculate distance A (Delivery Man to Restaurant)
+                $distanceA = self::get_distance(
+                    [$dm_latitude, $dm_longitude],
+                    [$restaurant_latitude, $restaurant_longitude]
+                );
+
+                // Calculate distance B (Restaurant to Customer)
+                $distanceB = self::get_distance(
+                    [$restaurant_latitude, $restaurant_longitude],
+                    [$customer_latitude, $customer_longitude]
+                );
+
+                // Total distance T = A + B
+                $totalDistance = $distanceA + $distanceB;
+
+                // Calculate delivery charge based on formula
+                if ($totalDistance <= 4) {
+                    $delivery_charge = (float) $base_payout;
+                } else {
+                    $delivery_charge = (float) ($base_payout + (($totalDistance - 4) * $per_km_rate));
+                }
+
+                return round($delivery_charge, 2);
+            } catch (\Exception $e) {
+                info('Error calculating dynamic delivery charge: ' . $e->getMessage());
+                return (float) ($base_payout ?? 25);
+            }
+        }
+
 }
