@@ -125,6 +125,33 @@ class OrderLogic
             $comission_on_actual_delivery_fee = ($order->delivery_charge > 0) ? $comission_on_delivery : 0;
         }
         $restaurant_amount =$restaurant_amount+ $order_amount + $order->total_tax_amount + $order->extra_packaging_amount - $comission_amount - $restaurant_coupon_discount_subsidy ;
+
+        // Apply restaurant flat fee based on price range and distance-based extra charge
+        $platform_flat_fee = 0;
+        $distance_extra_charge = 0;
+        try {
+            $flat = DB::table('restaurant_flat_fee')
+                ->where('zone_id', $order->zone_id)
+                ->where('flat_fee_from', '<=', $order->order_amount)
+                ->where('flat_fee_to', '>=', $order->order_amount)
+                ->first();
+            if ($flat) {
+                $platform_flat_fee = (float) ($flat->flat_fee ?? 0);
+            }
+
+            $distance = (float) ($order->distance ?? 0);
+            $per_km = (float) ($order->zone?->per_km_shipping_charge ?? 0);
+            if ($distance > 3 && $distance <= 6) { //5
+                $extraDistance = $distance - 3;
+                $distance_extra_charge = $extraDistance * $per_km;
+            } else {
+                $distance_extra_charge = 3 * $per_km;
+            }
+            // Deduct platform flat fee and distance extra from restaurant payout
+            $restaurant_amount = $restaurant_amount - $platform_flat_fee - $distance_extra_charge;
+        } catch (\Exception $e) {
+            info($e->getMessage());
+        }
         try{
             OrderTransaction::insert([
                 'vendor_id' =>$order->restaurant->vendor->id,
@@ -177,7 +204,8 @@ class OrderLogic
                 }
             }
 
-            $adminWallet->total_commission_earning = $adminWallet->total_commission_earning + $comission_amount + $comission_on_actual_delivery_fee - $admin_subsidy - $admin_coupon_discount_subsidy -$restaurant_discount_amount + $order->additional_charge  - $ref_bonus_amount;
+            // Add commission amounts plus platform flat fee and distance extra charge
+            $adminWallet->total_commission_earning = $adminWallet->total_commission_earning + $comission_amount + $comission_on_actual_delivery_fee - $admin_subsidy - $admin_coupon_discount_subsidy -$restaurant_discount_amount + $order->additional_charge  - $ref_bonus_amount + ($platform_flat_fee ?? 0) + ($distance_extra_charge ?? 0);
 
             if(($restaurant->restaurant_model == 'subscription' &&  $rest_sub?->self_delivery == 1) || ($restaurant->restaurant_model != 'subscription' && $restaurant->self_delivery_system == 1))
             {

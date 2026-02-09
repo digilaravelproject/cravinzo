@@ -415,7 +415,7 @@ class DeliverymanController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
         $dm = DeliveryMan::where(['auth_token' => $request['token']])->first();
-        $order = Order::where('id', $request['order_id'])->with(['subscription_logs','details'])->first();
+        $order = Order::with(['customer', 'restaurant', 'zone'])->where('id', $request['order_id'])->with(['subscription_logs','details'])->first();
         if(!isset($order)){
             return response()->json([
                 'errors' => [
@@ -423,6 +423,8 @@ class DeliverymanController extends Controller
                 ]
             ], 403);
         }
+        
+        // echo'<pre>';print_r($order->zone->per_km_shipping_charge);die;
 
         if($request['status'] =="confirmed" && config('order_confirmation_model') == 'restaurant')
         {
