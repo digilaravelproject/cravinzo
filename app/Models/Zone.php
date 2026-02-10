@@ -27,6 +27,8 @@ class Zone extends Model
         'flat_fee_from'=>'float',
         'flat_fee_to'=>'float',
         'flat_fee'=>'float',
+        'Restaurant_perKm_Rate'=>'float',
+        'Cust_Per_Km_Charge'=>'float',
         'coordinates' => Polygon::class,
     ];
 

@@ -73,6 +73,8 @@ class ZoneController extends Controller
         $zone->minimum_shipping_charge = $request->minimum_delivery_charge ?? 0;
         $zone->maximum_shipping_charge = $request->maximum_shipping_charge ??null ;
         $zone->max_cod_order_amount = $request->max_cod_order_amount ?? null;
+        $zone->Restaurant_perKm_Rate = $request->Restaurant_perKm_Rate ?? null;
+        $zone->Cust_Per_Km_Charge = $request->Cust_Per_Km_Charge ?? null;
         $zone->save();
 
         Helpers::add_or_update_translations(request: $request, key_data:'name' , name_field:'name' , model_name: 'Zone' ,data_id: $zone->id,data_value: $zone->name);
@@ -174,6 +176,8 @@ class ZoneController extends Controller
             'maximum_shipping_charge' => 'nullable|numeric|between:0,999999999999.99|gt:minimum_delivery_charge',
             'max_cod_order_amount' => 'nullable|numeric|between:0,999999999999.99',
             'increased_delivery_fee' => 'nullable|numeric|between:0,999999999.99|required_if:increased_delivery_fee_status,1',
+            'Restaurant_perKm_Rate' => 'nullable|numeric|between:0,999999999999.99',
+            'Cust_Per_Km_Charge' => 'nullable|numeric|between:0,999999999999.99',
             ], [
                 'increased_delivery_fee.required_if' => translate('messages.increased_delivery_fee_is_required')
             ]);
@@ -190,6 +194,8 @@ class ZoneController extends Controller
         $zone->increased_delivery_fee = $request->increased_delivery_fee ?? 0;
         $zone->increased_delivery_fee_status = $request->increased_delivery_fee_status ?? 0;
         $zone->increase_delivery_charge_message = $request->increase_delivery_charge_message ?? null;
+        $zone->Restaurant_perKm_Rate = $request->Restaurant_perKm_Rate ?? null;
+        $zone->Cust_Per_Km_Charge = $request->Cust_Per_Km_Charge ?? null;
         $zone->save();
         // Handle restaurant flat fees
         // Expect arrays: restaurant_flat_fee_from[], restaurant_flat_fee_to[], restaurant_flat_fee[]

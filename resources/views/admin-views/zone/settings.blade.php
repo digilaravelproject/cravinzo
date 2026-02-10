@@ -94,6 +94,40 @@
                     <div class="col-sm-6 col-lg-4">
                         <div class="form-group">
                             <label class="input-label text-capitalize d-inline-flex alig-items-center">
+                                {{ translate('messages.restaurant_per_km_rate') ?? 'Restaurant Per KM Rate' }}
+                                ({{ \App\CentralLogics\Helpers::currency_symbol() }})&nbsp;
+                                <span data-toggle="tooltip" data-placement="right"
+                                data-original-title="{{ translate('messages.Set_restaurant_per_kilometer_delivery_rate_for_this_business_zone.') ?? 'Set restaurant per kilometer delivery rate for this business zone.' }}"
+                                class="input-label-secondary "><img
+                                    src="{{ dynamicAsset('/public/assets/admin/img/info-circle.svg') }}"
+                                    alt="{{ translate('messages.restaurant_per_km_rate') }}"></span>
+                            </label>
+                            <input id="restaurant_per_km_rate" name="Restaurant_perKm_Rate" type="number"
+                                min="0" step=".001" class="form-control h--45px"
+                                placeholder="{{ translate('messages.Ex:_50') }}"
+                                value="{{ $zone->Restaurant_perKm_Rate ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label class="input-label text-capitalize d-inline-flex alig-items-center">
+                                {{ translate('messages.customer_per_km_rate') ?? 'Customer Per KM Rate' }}
+                                ({{ \App\CentralLogics\Helpers::currency_symbol() }})&nbsp;
+                                <span data-toggle="tooltip" data-placement="right"
+                                data-original-title="{{ translate('messages.Set_customer_per_kilometer_delivery_rate_for_this_business_zone.') ?? 'Set customer per kilometer delivery rate for this business zone.' }}"
+                                class="input-label-secondary "><img
+                                    src="{{ dynamicAsset('/public/assets/admin/img/info-circle.svg') }}"
+                                    alt="{{ translate('messages.customer_per_km_rate') }}"></span>
+                            </label>
+                            <input id="customer_per_km_rate" name="Cust_Per_Km_Charge" type="number"
+                                min="0" step=".001" class="form-control h--45px"
+                                placeholder="{{ translate('messages.Ex:_30') }}"
+                                value="{{ $zone->Cust_Per_Km_Charge ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label class="input-label text-capitalize d-inline-flex alig-items-center">
                                 {{ translate('messages.maximum_COD_order_amount') }}
                                 ({{ \App\CentralLogics\Helpers::currency_symbol() }})&nbsp;
                                 <span data-toggle="tooltip" data-placement="right"
