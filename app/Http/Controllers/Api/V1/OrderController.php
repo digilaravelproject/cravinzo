@@ -1494,13 +1494,15 @@ class OrderController extends Controller
         $flatFee = RestaurantFlatFee::latestByZone();
         $base_payout = $flatFee->base_payout ?? 0;
         
-        if($request->distance > 6){
-            $delivery_dist = $request->distance - 6;
+        // if($request->distance > 6){
+        //     $delivery_dist = $request->distance - 6;
             
-            $original_delivery_charge = ($delivery_dist * $per_km_shipping_charge) + $base_payout;
-        } else {
-            $original_delivery_charge = 0;
-        }
+        //     $original_delivery_charge = ($delivery_dist * $per_km_shipping_charge) + $base_payout;
+        // } else {
+        //     $original_delivery_charge = 0;
+        // }
+
+        $original_delivery_charge = $base_payout;
 
         if ($maximum_shipping_charge  > $minimum_shipping_charge  && $original_delivery_charge >  $maximum_shipping_charge ){
             $original_delivery_charge = $maximum_shipping_charge;

@@ -89,9 +89,28 @@ trait  Processor
     {
         $payment_info = PaymentRequest::find($payment_info->id);
         $token_string = 'payment_method=' . $payment_info->payment_method . '&&attribute_id=' . $payment_info->attribute_id . '&&transaction_reference=' . $payment_info->transaction_id;
+        // Build token
+        $encodedToken = base64_encode($token_string);
+        // If external redirect link provided for app/web, prefer redirecting there
         if (in_array($payment_info->payment_platform, ['web', 'app']) && $payment_info['external_redirect_link'] != null) {
-            return redirect($payment_info['external_redirect_link'] . '?flag=' . $payment_flag . '&&token=' . base64_encode($token_string));
+            $external = $payment_info['external_redirect_link'];
+            // Determine separator depending on whether URL already has query params
+            $sep = (strpos($external, '?') === false) ? '?' : '&';
+            // Include both `status` and `flag` parameters for compatibility with different clients
+            $query = $sep . 'status=' . $payment_flag . '&flag=' . $payment_flag . '&token=' . $encodedToken;
+            // Log the full external redirect for debugging callback issues
+            try {
+                info('Payment external redirect: ' . $external . $query);
+            } catch (\Exception $ex) {
+                // swallow logging errors to avoid breaking flow
+            }
+            return redirect($external . $query);
         }
-        return redirect()->route('payment-' . $payment_flag, ['token' => base64_encode($token_string)]);
+        // Log internal route redirect as well for debugging
+        try {
+            info('Payment internal redirect route: payment-' . $payment_flag . ' token=' . $encodedToken);
+        } catch (\Exception $ex) {
+        }
+        return redirect()->route('payment-' . $payment_flag, ['token' => $encodedToken]);
     }
 }

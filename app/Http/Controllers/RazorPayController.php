@@ -99,13 +99,18 @@ class RazorPayController extends Controller
     public function callback(Request $request): JsonResponse|Redirector|RedirectResponse|Application
     {
         $input = $request->all();
-        $data_id= base64_decode($request?->payment_data);
+        $data_id = base64_decode($request?->payment_data);
         if (count($input) && !empty($input['razorpay_payment_id'])) {
-            $data = $this->payment::where(['id' =>$data_id])->first();
+            $data = $this->payment::where(['id' => $data_id])->first();
+            if (!isset($data) && isset($input['razorpay_order_id'])) {
+                $order_id = $input['razorpay_order_id'];
+                $data = $this->payment::where('additional_data', 'like', "%{$order_id}%")->first();
+            }
+
             if (isset($data) && function_exists($data->success_hook)) {
-                $data->payment_method=  'razor_pay';
-                $data->is_paid=  1;
-                $data->transaction_id= $input['razorpay_payment_id'] ;
+                $data->payment_method = 'razor_pay';
+                $data->is_paid = 1;
+                $data->transaction_id = $input['razorpay_payment_id'];
                 $data->save();
                 call_user_func($data->success_hook, $data);
                 return $this->payment_response($data, 'success');
@@ -133,10 +138,14 @@ class RazorPayController extends Controller
 
             $razorpayOrder = $api->order->create([
                 'receipt' => 'order_' . uniqid(),
-                'amount' => (int)(round($request['payment_amount'], 2) * 100),
+                'amount' => (int) (round($request['payment_amount'], 2) * 100),
                 'currency' => $request['currency_code'],
                 'payment_capture' => 1
             ]);
+
+            $data = $this->payment::where(['id' => $request['payment_request_id']])->first();
+            $data->additional_data = json_encode(array_merge(json_decode($data->additional_data, true) ?? [], ['razorpay_order_id' => $razorpayOrder['id']]));
+            $data->save();
 
             return response()->json([
                 'status' => true,
