@@ -1310,6 +1310,11 @@ class DeliverymanController extends Controller
 
         ->paginate($limit, ['*'], 'page', $offset);
 
+        // Fetch rider_reimbursement data
+        $rider_reimbursement = \DB::table('rider_reimbursement')->where('rider_id', $dm->id)->first();
+        $ride_distance = $rider_reimbursement ? $rider_reimbursement->distance : 0;
+        $ride_distance_pay = $rider_reimbursement ? ($rider_reimbursement->distance / 10) : 0;
+
         $temp= [];
 
         foreach( $paginator->items() as $item)
@@ -1317,6 +1322,8 @@ class DeliverymanController extends Controller
             $item['amount'] = (float) $item['amount'];
             $item['status'] = 'Approved';
             $item['payment_time'] = \App\CentralLogics\Helpers::time_date_format($item->created_at);
+            $item['ride_distance'] = (float) $ride_distance;
+            $item['ride_distance_pay'] = (float) $ride_distance_pay;
 
             $temp[] = $item;
         }
