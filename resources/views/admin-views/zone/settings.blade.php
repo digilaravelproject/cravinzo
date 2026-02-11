@@ -250,7 +250,7 @@
                 <form action="{{ route('admin.zone.update_base_payout', $zone->id) }}" method="post">
                     @csrf
                     <div class="row">
-                        <div class="col-sm-6 col-lg-4">
+                        <div class="col-sm-6 col-lg-6">
                             <div class="form-group">
                                 <label class="input-label text-capitalize d-inline-flex alig-items-center">
                                     {{ translate('Total_Base_Payout') }}
@@ -265,6 +265,23 @@
                                     min=".001" step=".001" class="form-control h--45px" required
                                     placeholder="{{ translate('Ex:_100') }}"
                                     value="{{ $base_payout ?? '' }}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label class="input-label text-capitalize d-inline-flex alig-items-center">
+                                    {{ translate('Petrol_Price') }}
+                                    ({{ \App\CentralLogics\Helpers::currency_symbol() }})&nbsp;
+                                    <span data-toggle="tooltip" data-placement="right"
+                                        data-original-title="{{ translate('messages.Set_the_petrol_price_amount_for_all_deliverymen_in_this_zone._Leave_empty_to_use_base_payout_value.') }}"
+                                        class="input-label-secondary text-danger"><img
+                                            src="{{ dynamicAsset('/public/assets/admin/img/info-circle.svg') }}"
+                                            alt="{{ translate('Petrol_Price') }}"></span>
+                                </label>
+                                <input id="petrol_price" name="petrol_price" type="number"
+                                    min=".001" step=".001" class="form-control h--45px"
+                                    placeholder="{{ translate('Ex:_100') }}"
+                                    value="{{ $petrol_price ?? $base_payout ?? '' }}">
                             </div>
                         </div>
                     </div>

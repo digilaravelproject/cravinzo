@@ -8119,4 +8119,6 @@ characters)',
   'Rider_Payout_On_Average' => 'Rider Payout On Average',
   'Set_the_average_rider_payout_amount_for_all_deliverymen_in_this_zone.' => 'Set the average rider payout amount for all deliverymen in this zone.',
   'Ride_distance_in_km' => 'Ride distance in km',
+  'Petrol_Price' => 'Petrol Price',
+  'Set_the_petrol_price_amount_for_all_deliverymen_in_this_zone._Leave_empty_to_use_base_payout_value.' => 'Set the petrol price amount for all deliverymen in this zone. Leave empty to use base payout value.',
 );

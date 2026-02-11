@@ -108,7 +108,8 @@ class ZoneController extends Controller
         }
         $zone=Zone::with(['incentives','restaurantFlatFees'])->selectRaw("*,ST_AsText(ST_Centroid(`coordinates`)) as center")->latest()->first();
         $base_payout = $zone->restaurantFlatFees->first()?->base_payout ?? null;
-        return view('admin-views.zone.settings', compact('zone', 'base_payout'));
+        $petrol_price = $zone->restaurantFlatFees->first()?->petrol_price ?? null;
+        return view('admin-views.zone.settings', compact('zone', 'base_payout', 'petrol_price'));
     }
     public function zone_settings($id)
     {
@@ -119,7 +120,8 @@ class ZoneController extends Controller
         }
         $zone=Zone::with(['incentives','restaurantFlatFees'])->selectRaw("*,ST_AsText(ST_Centroid(`coordinates`)) as center")->findOrFail($id);
         $base_payout = $zone->restaurantFlatFees->first()?->base_payout ?? null;
-        return view('admin-views.zone.settings', compact('zone', 'base_payout'));
+        $petrol_price = $zone->restaurantFlatFees->first()?->petrol_price ?? null;
+        return view('admin-views.zone.settings', compact('zone', 'base_payout', 'petrol_price'));
     }
 
     public function update(Request $request, $id)
@@ -202,6 +204,7 @@ class ZoneController extends Controller
         if($request->has('restaurant_flat_fee')){
             // Get existing base_payout before deleting
             $existing_base_payout = RestaurantFlatFee::where('zone_id', $id)->first()?->base_payout;
+            $existing_petrol_price = RestaurantFlatFee::where('zone_id', $id)->first()?->petrol_price;
             
             // clear existing for the zone
             RestaurantFlatFee::where('zone_id', $id)->delete();
@@ -220,6 +223,7 @@ class ZoneController extends Controller
                     'flat_fee_to' => $to,
                     'flat_fee' => $fee,
                     'base_payout' => $existing_base_payout,
+                    'petrol_price' => $existing_petrol_price,
                 ]);
             }
         }
@@ -230,15 +234,20 @@ class ZoneController extends Controller
     public function update_base_payout(Request $request, $id){
         $request->validate([
             'base_payout'=>'required|numeric|between:0.001,999999999999.99',
+            'petrol_price' => 'nullable|numeric|between:0.001,999999999999.99',
         ]);
 
         $zone = Zone::findOrFail($id);
-        
-        // Update all restaurant flat fee records for this zone with the base payout
+
+        // if petrol_price provided use it, otherwise set petrol_price same as base_payout
+        $petrol = $request->petrol_price ?? $request->base_payout;
+
+        // Update all restaurant flat fee records for this zone with the base payout and petrol price
         RestaurantFlatFee::where('zone_id', $id)->update([
-            'base_payout' => $request->base_payout
+            'base_payout' => $request->base_payout,
+            'petrol_price' => $petrol,
         ]);
-        
+
         Toastr::success(translate('messages.base_payout_updated_successfully'));
         return back();
     }

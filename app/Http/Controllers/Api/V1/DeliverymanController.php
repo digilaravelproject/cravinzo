@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Shift;
 use App\Library\Payer;
 use App\Models\Zone;
+use App\Models\RestaurantFlatFee;
 use App\Traits\Payment;
 use App\Library\Receiver;
 use App\Models\DeliveryMan;
@@ -53,7 +54,15 @@ class DeliverymanController extends Controller
         // Fetch rider_reimbursement data
         $rider_reimbursement = \DB::table('rider_reimbursement')->where('rider_id', $dm->id)->first();
         $ride_distance = $rider_reimbursement ? $rider_reimbursement->distance : 0;
-        $ride_distance_pay = $rider_reimbursement ? ($rider_reimbursement->distance / 10) : 0;
+
+        // Get petrol_price from restaurant_flat_fee for this zone
+        $petrol_price = RestaurantFlatFee::where('zone_id', $dm->zone_id)->first()?->petrol_price ?? null;
+        // Compute R = petrol_price - 99.00 (as requested). If petrol_price missing, R = 0
+        $R = $petrol_price !== null ? (float)$petrol_price - 99.00 : 0;
+        if($R < 0) $R = 0;
+
+        // ride_distance_pay = floor(ride_distance / 40) * R
+        $ride_distance_pay = (int) floor(($ride_distance ?? 0) / 40) * $R;
 
         $dm['ride_distance'] = (float) $ride_distance;
         $dm['ride_distance_pay'] = (float) $ride_distance_pay;
@@ -1327,7 +1336,15 @@ class DeliverymanController extends Controller
         // Fetch rider_reimbursement data
         $rider_reimbursement = \DB::table('rider_reimbursement')->where('rider_id', $dm->id)->first();
         $ride_distance = $rider_reimbursement ? $rider_reimbursement->distance : 0;
-        $ride_distance_pay = $rider_reimbursement ? ($rider_reimbursement->distance / 10) : 0;
+
+        // Get petrol_price from restaurant_flat_fee for this zone
+        $petrol_price = RestaurantFlatFee::where('zone_id', $dm->zone_id)->first()?->petrol_price ?? null;
+        // Compute R = petrol_price - 99.00 (as requested). If petrol_price missing, R = 0
+        $R = $petrol_price !== null ? (float)$petrol_price - 99.00 : 0;
+        if($R < 0) $R = 0;
+
+        // ride_distance_pay = floor(ride_distance / 40) * R
+        $ride_distance_pay = (int) floor(($ride_distance ?? 0) / 40) * $R;
 
         $temp= [];
 

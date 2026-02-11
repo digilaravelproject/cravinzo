@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('flat_fee_from', 8, 2)->nullable();
             $table->decimal('flat_fee_to', 8, 2)->nullable();
             $table->decimal('flat_fee', 8, 2)->nullable();
+            $table->decimal('petrol_price', 8, 2)->nullable();
             $table->timestamps();
 
             $table->foreign('zone_id')
