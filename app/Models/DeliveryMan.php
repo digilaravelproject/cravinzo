@@ -126,6 +126,11 @@ class DeliveryMan extends Authenticatable
             ->groupBy('delivery_man_id');
     }
 
+    public function reimbursement()
+    {
+        return $this->hasOne(RiderReambesment::class, 'rider_id', 'id');
+    }
+
     public function scopeActive($query)
     {
         return $query->where('active', 1)->where('application_status','approved');

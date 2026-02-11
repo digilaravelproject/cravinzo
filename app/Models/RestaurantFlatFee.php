@@ -19,7 +19,6 @@ class RestaurantFlatFee extends Model
         'flat_fee_from' => 'float',
         'flat_fee_to' => 'float',
         'flat_fee' => 'float',
-        'base_payout' => 'float',
     ];
 
     public function zone()

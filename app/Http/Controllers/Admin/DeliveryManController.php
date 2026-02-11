@@ -43,7 +43,7 @@ class DeliveryManController extends Controller
     {
         $key = explode(' ', $request['search']);
         $zone_id = $request->query('zone_id', 'all');
-        $delivery_men = DeliveryMan::with(['orders', 'rating', 'zone'])->
+        $delivery_men = DeliveryMan::with(['orders', 'rating', 'zone', 'reimbursement'])->
         when(is_numeric($zone_id), function ($query) use ($zone_id) {
             return $query->where('zone_id', $zone_id);
         })->where('type', 'zone_wise')->latest()->where('application_status', 'approved')
@@ -260,7 +260,7 @@ class DeliveryManController extends Controller
 
     public function edit($id)
     {
-        $delivery_man = DeliveryMan::find($id);
+        $delivery_man = DeliveryMan::with('reimbursement')->find($id);
         $additional_documents_size = 0;
 
         if (!empty($delivery_man['additional_documents'])) {

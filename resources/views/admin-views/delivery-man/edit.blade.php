@@ -90,6 +90,12 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group m-0">
+                                            <label class="input-label" for="ride-distance">{{translate('Ride_distance_in_km')}} <span class="text-danger">*</span></label>
+                                            <input type="text" id="ride-distance" value="{{ $delivery_man->reimbursement?->distance ?? 0 }}" class="form-control h--45px" placeholder="{{translate('Ride_distance_in_km')}}" disabled>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>

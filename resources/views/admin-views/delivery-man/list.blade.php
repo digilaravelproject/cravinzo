@@ -96,6 +96,7 @@
                                 <th class="text-capitalize w-20p">{{translate('messages.name')}}</th>
                                 <th class="text-capitalize">{{ translate('messages.contact') }}</th>
                                 <th class="text-capitalize">{{translate('messages.zone')}}</th>
+                                <th class="text-capitalize">{{ translate('Ride_distance_in_km') }}</th>
                                 <th class="text-capitalize text-center">{{ translate('Total_Orders') }}</th>
                                 <th class="text-capitalize">{{translate('messages.availability_status')}}</th>
                                 <th class="text-capitalize text-center w-110px">{{translate('messages.action')}}</th>
@@ -134,6 +135,11 @@
                                         @else
                                         <span>{{translate('messages.zone_deleted')}}</span>
                                         @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="pr-3">
+                                            <span>{{ $dm->reimbursement?->distance ?? 0 }} km</span>
+                                        </div>
                                     </td>
                                     <!-- Static Data -->
                                     <td class="text-center">

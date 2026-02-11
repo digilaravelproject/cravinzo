@@ -450,6 +450,7 @@ class ConfigController extends Controller
             'increased_delivery_fee_status',
             'increase_delivery_charge_message',
             'per_km_shipping_charge',
+            'Cust_Per_Km_Charge',
             'max_cod_order_amount',
             'maximum_shipping_charge'
         ]);

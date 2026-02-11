@@ -31,6 +31,7 @@ use App\Library\Payment as PaymentInfo;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use App\Models\DisbursementWithdrawalMethod;
+use App\Models\RiderReambesment;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class DeliverymanController extends Controller
@@ -434,6 +435,46 @@ class DeliverymanController extends Controller
         $order->delivery_man_id = $dm->id;
         $order->accepted = now();
         $order->save();
+
+        // Calculate and store distance in rider_reambesment table
+        try {
+            $restaurant_latitude = $order->restaurant?->latitude;
+            $restaurant_longitude = $order->restaurant?->longitude;
+
+            // Get customer delivery address coordinates
+            $delivery_address = $order->delivery_address;
+            $customer_latitude = null;
+            $customer_longitude = null;
+
+            if ($delivery_address) {
+                // Handle if delivery_address is a JSON string or object
+                if (is_string($delivery_address)) {
+                    $delivery_address = json_decode($delivery_address, true);
+                    $customer_latitude = $delivery_address['latitude'] ?? null;
+                    $customer_longitude = $delivery_address['longitude'] ?? null;
+                } else {
+                    $customer_latitude = $delivery_address->latitude ?? null;
+                    $customer_longitude = $delivery_address->longitude ?? null;
+                }
+            }
+
+            // Calculate distance between restaurant and customer if coordinates are available
+            if ($restaurant_latitude && $restaurant_longitude && $customer_latitude && $customer_longitude) {
+                $distance = Helpers::get_distance(
+                    [$restaurant_latitude, $restaurant_longitude],
+                    [$customer_latitude, $customer_longitude],
+                    'K'  // Distance in kilometers
+                );
+
+                // Store distance in rider_reambesment table
+                RiderReambesment::create([
+                    'rider_id' => $dm->id,
+                    'distance' => $distance,
+                ]);
+            }
+        } catch (\Exception $e) {
+            info('Error calculating and storing distance for order ' . $order->id . ': ' . $e->getMessage());
+        }
 
         $dm->current_orders = $dm->current_orders+1;
         $dm->save();
