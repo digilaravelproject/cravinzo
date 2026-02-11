@@ -94,7 +94,7 @@ $order_sch = Cache::rememberForever('order_scheduled_stats', function () {
                         </a>
                     </li>
                     <!-- End Dashboards -->
-                    @if (Helpers::module_permission_check('pos'))
+                    <?php /*@if (Helpers::module_permission_check('pos'))
                         <!-- POS -->
                         <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/pos') ? 'active' : '' }}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.pos.index') }}"
@@ -105,7 +105,7 @@ $order_sch = Cache::rememberForever('order_scheduled_stats', function () {
                             </a>
                         </li>
                         <!-- End POS -->
-                    @endif
+                    @endif */?>
 
 
 
@@ -952,7 +952,7 @@ $order_sch = Cache::rememberForever('order_scheduled_stats', function () {
                         </li>
                     @endif
                     @if (Helpers::module_permission_check('customerList'))
-                        <li
+                        <?php /*<li
                             class="navbar-vertical-aside-has-menu {{ Request::is('admin/customer/loyalty-point*') ? 'active' : '' }}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link  nav-link-toggle" href="javascript:"
                                 title="{{ translate('messages.loyalty_point') }}">
@@ -975,7 +975,7 @@ $order_sch = Cache::rememberForever('order_scheduled_stats', function () {
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> */?>
                         <li
                             class="navbar-vertical-aside-has-menu {{ Request::is('admin/customer/subscribed') ? 'active' : '' }}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
@@ -1011,7 +1011,7 @@ $order_sch = Cache::rememberForever('order_scheduled_stats', function () {
                                 </span>
                             </a>
                         </li>
-                        <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/shift*') ? 'active' : '' }}">
+                        <?php /*<li class="navbar-vertical-aside-has-menu {{ Request::is('admin/shift*') ? 'active' : '' }}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
                                 href="{{ route('admin.shift.list') }}"
                                 title="{{ translate('messages.Shift_setup') }}">
@@ -1020,7 +1020,7 @@ $order_sch = Cache::rememberForever('order_scheduled_stats', function () {
                                     {{ translate('messages.Shift_setup') }}
                                 </span>
                             </a>
-                        </li>
+                        </li> */?>
 
                         <li
                             class="navbar-vertical-aside-has-menu {{ Request::is('admin/delivery-man*') ? 'active' : '' }}">
@@ -1799,14 +1799,14 @@ $order_sch = Cache::rememberForever('order_scheduled_stats', function () {
                             </a>
                         </li>
 
-                        <li class="nav-item {{ Request::is('admin/react-landing-page*') ? 'active' : '' }}">
+                        <?php /*<li class="nav-item {{ Request::is('admin/react-landing-page*') ? 'active' : '' }}">
                             <a class="nav-link" href="{{ route('admin.react_landing_page.react_header') }}"
                                 title="{{ translate('messages.React_landing_page') }} ">
                                 <span class="tio-circle nav-indicator-icon"></span>
                                 <span
                                     class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{ translate('messages.React_landing_page') }}</span>
                             </a>
-                        </li>
+                        </li> */?>
                     </ul>
                 </li>
 
@@ -1821,13 +1821,13 @@ $order_sch = Cache::rememberForever('order_scheduled_stats', function () {
                     </a>
                 </li>
 
-                <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/business-settings/react*') ? 'active' : '' }}">
+                <?php /*<li class="navbar-vertical-aside-has-menu {{ Request::is('admin/business-settings/react*') ? 'active' : '' }}">
                     <a class="nav-link " href="{{ route('admin.business-settings.react-setup') }}"
                         title="{{ translate('messages.react_site') }}">
                         <span class="tio-rear-window-defrost nav-icon"></span>
                         <span class="text-truncate">{{ translate('messages.react_site') }}</span>
                     </a>
-                </li>
+                </li> */?>
 
                 <li  class="navbar-vertical-aside-has-menu {{ Request::is('admin/business-settings/db-index') ? 'active' : '' }}">
                     <a class="js-navbar-vertical-aside-menu-link nav-link"
@@ -1839,24 +1839,24 @@ $order_sch = Cache::rememberForever('order_scheduled_stats', function () {
                         </span>
                     </a>
                 </li>
-                <li
+                <?php /*<li
                     class="navbar-vertical-aside-has-menu {{ Request::is('admin/addon-activation*') ? 'active' : '' }}">
                     <a class="nav-link "
                         href="{{ route('admin.addon-activation.index') }}"
                         title="{{ translate('messages.Addon_Activation') }}">
                         <span class="tio-appointment nav-icon"></span>
                         <span class="text-truncate">{{ translate('messages.Addon_Activation') }}</span>
-                    </a>
-                </li>
+                    </a> 
+                </li> */?>
 
                 <!-- End web & adpp Settings -->
 
-                <li class="nav-item">
+                <?php /*<li class="nav-item">
                     <small class="nav-subtitle">{{ translate('messages.system_addons') }}</small>
                     <small class="tio-more-horizontal nav-subtitle-replacer"></small>
-                </li>
+                </li> */?>
                 <!-- system_addons -->
-                <li
+                <?php /*<li
                     class="navbar-vertical-aside-has-menu {{ Request::is('admin/business-settings/system-addon') ? 'show active' : '' }}">
                     <a class="js-navbar-vertical-aside-menu-link nav-link"
                         href="{{ route('admin.business-settings.system-addon.index') }}"
@@ -1866,7 +1866,7 @@ $order_sch = Cache::rememberForever('order_scheduled_stats', function () {
                             {{ translate('messages.system_addons') }}
                         </span>
                     </a>
-                </li>
+                </li> */?>
                 <!-- End system_addons -->
 
                 @if (count(config('addon_admin_routes')) > 0)
