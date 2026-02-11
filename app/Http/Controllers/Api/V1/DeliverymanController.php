@@ -50,6 +50,14 @@ class DeliverymanController extends Controller
         $dm['this_week_order_count'] =(integer)$dm->this_week_orders->count();
         $dm['member_since_days'] =(integer)$dm->created_at->diffInDays();
 
+        // Fetch rider_reimbursement data
+        $rider_reimbursement = \DB::table('rider_reimbursement')->where('rider_id', $dm->id)->first();
+        $ride_distance = $rider_reimbursement ? $rider_reimbursement->distance : 0;
+        $ride_distance_pay = $rider_reimbursement ? ($rider_reimbursement->distance / 10) : 0;
+
+        $dm['ride_distance'] = (float) $ride_distance;
+        $dm['ride_distance_pay'] = (float) $ride_distance_pay;
+
         $dm['cash_in_hands'] =(float) ($dm?->wallet?->collected_cash ?? 0);
         $dm['balance'] = (float) ($dm?->wallet?->total_earning - $dm?->wallet?->total_withdrawn  ?? 0);
 
@@ -466,11 +474,17 @@ class DeliverymanController extends Controller
                     'K'  // Distance in kilometers
                 );
 
-                // Store distance in rider_reambesment table
-                RiderReambesment::create([
-                    'rider_id' => $dm->id,
-                    'distance' => $distance,
-                ]);
+                // Store or update distance in rider_reambesment table
+                $existing = RiderReambesment::where('rider_id', $dm->id)->first();
+                if ($existing) {
+                    $existing->distance = ($existing->distance ?? 0) + $distance;
+                    $existing->save();
+                } else {
+                    RiderReambesment::create([
+                        'rider_id' => $dm->id,
+                        'distance' => $distance,
+                    ]);
+                }
             }
         } catch (\Exception $e) {
             info('Error calculating and storing distance for order ' . $order->id . ': ' . $e->getMessage());

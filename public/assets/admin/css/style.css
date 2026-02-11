@@ -216,8 +216,8 @@ label {
 
 .auth-wrapper .btn-primary {
     box-shadow: 0px 4px 8px -4px rgba(58, 53, 65, 0.42);
-    background: #ff8a00;
-    border-color: #ff8a00 !important;
+    background: #1c4116;
+    border-color: #1c4116 !important;
     color: #fff;
     border-radius: 5px;
     max-width: 385px;
@@ -384,7 +384,7 @@ label {
     color: #fff;
     width: 35%;
     max-width: 508px;
-    background: rgba(255, 138, 0, 0.8);
+    background: rgba(5 46 3 / 80%);
     font-size: 20px;
     position: fixed;
     top: 50%;
@@ -4372,7 +4372,7 @@ button.resend {
 }
 
 :root {
-    --primary: #ff7a00;
+    --primary: #1c4116;
 }
 
 .nav--tabs.nav--pills .nav-item .nav-link {

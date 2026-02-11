@@ -110,7 +110,7 @@
             <div class="row g-4 align-items-center">
                 <div class="col-lg-7">
                     <div class="about-content wow fadeInDown">
-                        <h2 class="title text-base">{{ $landing_data['about_us_title']   }}</h2>
+                        <h2 class="title text-base">{{ 'Cravinzo' }}</h2>
                         <h3 class="subtitle">{{ $landing_data['about_us_sub_title']}}</h3>
                         <p class="txt">
                             {{ $landing_data['about_us_text'] }}
